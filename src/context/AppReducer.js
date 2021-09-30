@@ -12,7 +12,11 @@ export default (state, action) => {
                 ...state,
                 teams: [action.payload, ...state.teams]
             }
-
+        case "UNDO":
+            return {
+                ...state,
+                teams: state.teams.filter(v => v !== action.id)
+            };
 
         default:
             return state;

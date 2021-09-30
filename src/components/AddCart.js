@@ -17,6 +17,7 @@ function AddCart () {
             name,
             logo,
             winner:"",
+            last_vote_date:"2021-09-30T19:02:38.285Z",
             votes:0
         }
         addCart(newCart);

@@ -11,7 +11,8 @@ function VotingCard(props) {
             <Card.Img variant="top" src={`/assets/images/${team.logo}`} />
             <Card.Body>
                 <Card.Title>{team.name}</Card.Title>
-                <div>Winner : {team.winner}</div>
+                <div style={{fontSize:"12px"}}><div>Winner : {team.winner}</div>
+                <div>Last Vote Date : {team.last_vote_date}</div></div>
                 <Button variant="success" className="bg-green-400 hover:bg-green-500 text-white font-bold rounded focus:outline-none focus:shadow-outline" onClick={() => incrementVoteCount(team._id)}>
                     UP
                 </Button>
