@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from "react";
-import teamsJson from "../lib/teams.json";
+import React, {useContext, useState} from "react";
 import {Col, Row} from "react-bootstrap";
 import VotingCard from "./VotingCard";
 import ReactPaginate from "react-paginate";
 import {Link} from "react-router-dom";
+import {Modal} from "react-responsive-modal";
+import {GlobalContext} from "../context/GlobalState";
 
 const PER_PAGE = 6;
 function VotingCardList(props) {
-    let [teams, setTeams] = useState([]);
+    const [open, setOpen] = useState(false);
+    const onOpenModal = () => setOpen(true);
+    const onCloseModal = () => setOpen(false);
     const [currentPage, setCurrentPage] = useState(0);
-    useEffect(() => {
-        setTeams(teamsJson);
-    }, []);
 
+    let { teams,removeCart } = useContext(GlobalContext);
     function handlePageClick({selected: selectedPage}) {
         setCurrentPage(selectedPage);
     }
-
     function incrementVoteCount(teamId) {
         teams = teams.map((team) => {
             if (team._id === teamId) {
@@ -24,7 +24,7 @@ function VotingCardList(props) {
             }
             return team;
         });
-        setTeams(teams);
+
     }
 
     function desVoteCount(teamId) {
@@ -34,9 +34,22 @@ function VotingCardList(props) {
             }
             return team;
         });
-        setTeams(teams);
-    }
 
+    }
+    const closeIcon =
+        (
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 36 36"
+                fillOpacity=".5"
+                fillRule="evenodd"
+                clipRule="evenodd"
+            >
+                <path d="M12 11.293L22.293 1l.707.707L12.707 12 23 22.293l-.707.707L12 12.707 1.707 23 1 22.293 11.293 12 1 1.707 1.707 1 12 11.293z"></path>
+            </svg>
+        );
 
     const offset = currentPage * PER_PAGE;
 
@@ -63,7 +76,9 @@ function VotingCardList(props) {
                             team={team}
                             incrementVoteCount={(teamId) => incrementVoteCount(teamId)}
                             desVoteCount={(teamId) => desVoteCount(teamId)}
-                        />
+                        /> <button onClick={() => removeCart(team._id)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-full inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
                     </Col>
                 );
             })}
@@ -78,7 +93,34 @@ function VotingCardList(props) {
         nextLinkClassName={"pagination__link"}
         disabledClassName={"pagination__link--disabled"}
         activeClassName={"pagination__link--active"}
-    /></div>
+    />
+
+
+            <Modal open={open} onClose={onCloseModal} closeIcon={closeIcon}
+                   center
+                   classNames={{
+                       modal: 'modal-dialog deleteModal'
+                   }}>
+                <div>
+                    <h6 className="title">Remove Nominee</h6>
+                    {teams.map((team) => {
+                        return(
+                    <div className="modal-body pl-0 pb-0">
+                        <div className="vcard sModalHeight">
+                          Do you want to remove {team.name}
+
+                        </div>
+                        <div className="modal-footer">
+                            <a href="#" className="btn btn-primary btn-md-2 float-right" onClick={onCloseModal}>Cancel</a>
+                            <a href="#" className="btn btn-primary btn-md-2 float-right"
+                               onClick={() => removeCart(team._id)}>OK
+                            </a>
+                        </div>
+                    </div>) })};
+                </div>
+            </Modal>
+
+        </div>
     );
 }
 export default VotingCardList;

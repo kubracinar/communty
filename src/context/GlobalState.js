@@ -1,9 +1,9 @@
-import React, {createContext, useReducer} from 'react';
+import React, { createContext, useReducer } from 'react';
 import AppReducer from './AppReducer'
 import teamsJson from "../lib/teams.json";
 
 const initialState = {
-    teams:[teamsJson]
+    teams:teamsJson
 }
 
 export const GlobalContext = createContext(initialState);
@@ -25,11 +25,11 @@ export const GlobalProvider = ({ children }) => {
     };
 
 
+
     return (<GlobalContext.Provider value={{
-        employees: state.employees,
+        teams: state.teams,
         removeCart,
         addCart,
-
     }}>
         {children}
     </GlobalContext.Provider>);

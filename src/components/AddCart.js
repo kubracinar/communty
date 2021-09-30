@@ -13,10 +13,11 @@ function AddCart () {
     const onSubmit = e => {
         e.preventDefault();
         const newCart = {
-            _id: teams.length + 1,
+            _id: teams && teams.length + 1,
             name,
             logo,
-            winner,
+            winner:"",
+            votes:0
         }
         addCart(newCart);
         history.push("/");
@@ -33,13 +34,13 @@ function AddCart () {
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:text-gray-600" value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Enter name" />
                     </div>
                     <div className="w-full  mb-5">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="location">
+                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="winner">
                             Tournament Winner Team
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline" value={winner} onChange={(e) => setWinner(e.target.value)} type="text" placeholder="Enter winner" />
                     </div>
                     <div className="w-full  mb-5">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="designation">
+                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="url">
                             Cover Image Url
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:text-gray-600" value={logo} onChange={(e) => setLogo(e.target.value)} type="text" placeholder="Enter url" />
