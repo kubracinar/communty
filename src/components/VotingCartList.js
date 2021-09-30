@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Col, Row} from "react-bootstrap";
 import VotingCard from "./VotingCard";
 import ReactPaginate from "react-paginate";
@@ -7,6 +7,7 @@ import {Modal} from "react-responsive-modal";
 import {GlobalContext} from "../context/GlobalState";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import actionTypes from "../utils/actionTypes";
 
 const PER_PAGE = 6;
 function VotingCardList(props) {
@@ -15,7 +16,8 @@ function VotingCardList(props) {
     const onCloseModal = () => setOpen(false);
     const [currentPage, setCurrentPage] = useState(0);
 
-    let { teams,removeCart } = useContext(GlobalContext);
+    let { teams,removeCart,orderBy,
+        setOrderBy,dispatch } = useContext(GlobalContext);
     function handlePageClick({selected: selectedPage}) {
         setCurrentPage(selectedPage);
     }
@@ -38,6 +40,25 @@ function VotingCardList(props) {
         });
 
     }
+    const handleChange = event => {
+        const value = event.target.value;
+        let type;
+
+        switch (value) {
+            case "asc":
+                type = actionTypes.ORDER_BY_ASC;
+                break;
+            case "desc":
+                type = actionTypes.ORDER_BY_DESC;
+                break;
+            default:
+                type = actionTypes.ORDER_BY_DEFAULT;
+        }
+
+        dispatch({ type });
+        setOrderBy(value);
+        setCurrentPage(1);
+    };
     const closeIcon =
         (
             <svg
@@ -63,7 +84,11 @@ function VotingCardList(props) {
             <div className="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-1">
                 <div>
                     <button className="m-1 bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded inline-flex items-center" style={{float: "left"}}><Link to='/add'>+ ADD NOMİNEE</Link></button>
-                    <button className="m-1 bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded inline-flex items-center" style={{float: "right"}}>Sort by</button>
+                    <div className="m-1 bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded inline-flex items-center" style={{float: "right"}}>Sort by <select className="form-control" data-testid="select" onChange={handleChange} value={orderBy}>
+                        <option value="">Order by</option>
+                        <option value="desc">Most Voted (Z -> A)</option>
+                        <option value="asc">Less Voted (A -> Z)</option>
+                    </select></div>
                 </div>
 
             </div>

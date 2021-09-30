@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, {createContext, useEffect, useReducer} from 'react';
 import AppReducer from './AppReducer'
 import teamsJson from "../lib/teams.json";
 import {toast} from "react-toastify";
@@ -7,6 +7,11 @@ const initialState = {
     teams:teamsJson
 }
 
+
+const orderBy = localStorage.getItem("orderBy") !== null ? localStorage.getItem("orderBy") : "";
+const setOrderBy = value => {
+    localStorage.setItem("orderBy", value);
+};
 export const GlobalContext = createContext(initialState);
 
 const Undo = ({ onUndo, closeToast }) => {
@@ -23,6 +28,7 @@ const Undo = ({ onUndo, closeToast }) => {
         </div>
     );
 };
+
 export const GlobalProvider = ({ children }) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
@@ -48,6 +54,7 @@ export const GlobalProvider = ({ children }) => {
         teams: state.teams,
         removeCart,
         addCart,
+        orderBy, setOrderBy,dispatch
     }}>
         {children}
     </GlobalContext.Provider>);
