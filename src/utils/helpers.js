@@ -3,8 +3,8 @@ export const getSortedList = (list, type = "") => {
         let returnValue = 0;
 
         if (type === "") {
-            if (a.id < b.id) returnValue = 1;
-            if (a.id > b.id) returnValue = -1;
+            if (a._id < b._id) returnValue = 1;
+            if (a._id > b._id) returnValue = -1;
 
             return returnValue;
         }
@@ -20,8 +20,8 @@ export const getSortedList = (list, type = "") => {
             return returnValue;
         }
 
-        if (a.id < b.id) returnValue = 1;
-        if (a.id > b.id) returnValue = -1;
+        if (a._id < b._id) returnValue = 1;
+        if (a._id > b._id) returnValue = -1;
 
         return returnValue;
     });
@@ -31,14 +31,14 @@ export const getSortedList = (list, type = "") => {
 
 export const vote = (state, id, type) => {
     return state.map(team => {
-        if (team.id !== id) {
+        if (team._id !== id) {
             return team;
         }
 
         if (type === "up") {
-            team.counter++;
+            team.votes++;
         } else {
-            team.counter--;
+            team.votes--;
         }
 
         return team;
